@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastermind Splash Screen</title>
+    
+
+  </head>
+  <body>
+
+    <div class = "stats">
+        <p>Games played: x</p>
+        <p>Games ongoing: x</p>
+    </div>
+
+    <div class = "rules">
+        <h1>Mastermind</h1>
+        <h3>Rules:</h3>
+        <ul>
+            <li>There are 8 different coloured pins. One player makes a code out of 4 pins, the order also matters!. Colours can be used multiple times.</li>
+            <li>The other player has 10 guesses to crack the code. The player chooses 4 pins and places them on the board in the order they want.</li>
+            <li>After submitting a guess, the player that made the code has to rate the guess, they do this by rating each individual pin. A pin can be rated in 3 ways:
+                <ul>
+                    <li>Green: The pin is of the right colour, and in the right place.</li>
+                    <li>Yellow: The pin is of the right colour, but not in the right place.</li>
+                    <li>Red: This colour pin is not in the code.</li>
+                </ul>
+            </li>
+            <li>The guesser then gets back these 4 ratings, however, the guesser does not know which rating belongs to which pin. So all the guesser knows, is that they had <em>x</em> pins that were the right colour and in the right spot, <em>y</em> pins that were the right colour, but in the wrong spot, and <em>z</em> pins that were not in the code at all.</li>
+            <li>If the guesser can crack the code within 10 guesses, they win, otherwise, the code-maker wins!</li>
+        </ul>
+
+        <input type = "button" value = "Play!"> 
+
+    </div>
+
+    <div class = "logo">
+      <img src = "MasterMindLogo.png" alt = "logo">
+    </div>
+
+  </body>
+</html>
