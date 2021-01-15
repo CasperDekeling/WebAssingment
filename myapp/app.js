@@ -7,6 +7,7 @@ const websocket = require("ws");
 const port = process.argv[2];
 const app = express();
 
+//Routes
 app.get("/", indexRouter);
 app.get("/game", indexRouter);
 app.get("/play", indexRouter);
@@ -67,6 +68,7 @@ wss.on("connection", function (ws) {
     gameID++;
     games.push(new Game(gameID));
   }
+  //Every player gets their own ID
   let con = ws;
   con.id = connectionID++;
   console.log(con.id);
@@ -88,6 +90,7 @@ wss.on("connection", function (ws) {
   }
 
   ws.on("message", function incoming(message) {
+    //If the incoming message starts with "Guess = ", this is followed by the guess of player 2, which gets forwarded directly to player 1 to rate.
     if(message.includes("Guess = ")){
       games[gameID].player1.send(message);
     }

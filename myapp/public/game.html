@@ -163,10 +163,12 @@
         const target = document.querySelector(".status");
         const socket = new WebSocket("ws://localhost:3000");
         
+        //Hides the board until the game starts.
         const board = document.querySelector(".board");
         board.hidden = true;
 
         document.querySelector(".guessSubmit").onclick = function() {
+            //If player 2 submits their guess, puts all 4 pins into an array and sends it to the server (which sends it to player 1)
             let hole1 = document.getElementById("hole1");
             let hole2 = document.getElementById("hole2");
             let hole3 = document.getElementById("hole3");
@@ -176,37 +178,51 @@
         }
 
         socket.onmessage = function(event) {
+            //Update status
             target.innerHTML = event.data;
+
+            //Does nothing yet
             let player;
 
             if(event.data.includes("You are player 1")){
+                //If the received message contains "You are player 1", then (obviously) you are player one, this is set in the player variable.
                 player = 1;
+                //Hides the guessSubmit button from player 1
                 document.querySelector(".guessSubmit").hidden = true;
             }            
             if(event.data.includes("You are player 2")) {
+                //If the received message contains "You are player 2", then (obviously) you are player two, this is set in the player variable.
                 player = 2; 
             } 
 
             if(event.data.includes("game is starting...")){
+                //When the game starts, un-hides the board.
                 board.hidden = false;
             }
 
             if(event.data.includes("Guess = ")){
+                //If the message contains "Guess = ", then this is the guess from the other player, forwarded by the server.
+                //When this happens, take the substring which is just the guess, in the shape of an array (so without "Guess = ")
+                //From this string, split it into an actual array.
                 let guess = event.data.substring(8); 
                 let guessArray = guess.split(",");
 
                 const rateGuess = document.querySelector(".rateGuess");
                 const rateGuessForm = document.querySelector(".rateGuessForm");
 
+
+                //Creates new li elements to display the guess of the other player.
                 const rateGuess1 = document.createElement("li");
                 const rateGuess2 = document.createElement("li");
                 const rateGuess3 = document.createElement("li");
                 const rateGuess4 = document.createElement("li");
 
+                //Create select element to rate the pins.
                 let select1 = document.createElement("select")
                 select1.name = "rating1";
                 select1.id = "rating1";
 
+                //Add 3 options to the select element (green, yellow, red), with accompanying values (5, 1, 0 respectively).
                 let option = document.createElement("option");
                 option.value = "5";
                 option.text = "Green";
@@ -220,61 +236,12 @@
                 option.text = "Red";
                 select1.appendChild(option);
 
+                //Make a 3 deep copies of the select1, so we'll have 4 select items in total, one per pin. 
                 let select2 = select1.cloneNode(true);
                 let select3 = select1.cloneNode(true);
                 let select4 = select1.cloneNode(true);
 
-                // let select2 = document.createElement("select")
-                // select2.name = "rating2";
-                // select2.id = "rating2";
-
-                // let option = document.createElement("option");
-                // option.value = "5";
-                // option.text = "Green";
-                // select2.appendChild(option);
-                // option = document.createElement("option");
-                // option.value = "1";
-                // option.text = "Yellow";
-                // select2.appendChild(option);
-                // option = document.createElement("option");
-                // option.value = "0";
-                // option.text = "Red";
-                // select2.appendChild(option);
-
-                // let select3 = document.createElement("select")
-                // select3.name = "rating3";
-                // select3.id = "rating3";
-
-                // let option = document.createElement("option");
-                // option.value = "5";
-                // option.text = "Green";
-                // select3.appendChild(option);
-                // option = document.createElement("option");
-                // option.value = "1";
-                // option.text = "Yellow";
-                // select3.appendChild(option);
-                // option = document.createElement("option");
-                // option.value = "0";
-                // option.text = "Red";
-                // select3.appendChild(option);
-
-                // let select4 = document.createElement("select")
-                // select4.name = "rating4";
-                // select4.id = "rating4";
-
-                // let option = document.createElement("option");
-                // option.value = "5";
-                // option.text = "Green";
-                // select4.appendChild(option);
-                // option = document.createElement("option");
-                // option.value = "1";
-                // option.text = "Yellow";
-                // select4.appendChild(option);
-                // option = document.createElement("option");
-                // option.value = "0";
-                // option.text = "Red";
-                // select4.appendChild(option);
-
+                //Display 4 li elements, with all of the 4 pins displayed in one li element per pin, and in every li element there's a select box to rate that pin
                 rateGuess1.innerHTML = guessArray[0];
                 rateGuess1.appendChild(select1);
                 rateGuess2.innerHTML = guessArray[1];
@@ -284,20 +251,19 @@
                 rateGuess4.innerHTML = guessArray[3];
                 rateGuess4.appendChild(select4);
 
+                //Add the li elements to the ul
                 rateGuess.appendChild(rateGuess1);
                 rateGuess.appendChild(rateGuess2);
                 rateGuess.appendChild(rateGuess3);
                 rateGuess.appendChild(rateGuess4);
 
+                //Unhides the submit button, which was hidden until the guess was submitted.
                 document.querySelector(".rateGuessSubmit").hidden = false;
-
-
-                // const guessPar = document.querySelector(".rateGuess");
-                // guessPar.textContent = guess;
             }
         }
 
         socket.onopen = function() {
+            //Attempts to join a game once the connection is open.
             socket.send("Attempting to join");
             target.innerHTML = "Attempting to join...";
         }
