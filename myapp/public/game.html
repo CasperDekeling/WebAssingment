@@ -10,13 +10,14 @@
   <body>
 
     <div class = "logo">
-        <img src = "MasterMindLogo.png">
+        <img src = "images/MasterMindLogo.png">
         <h1>MasterMind</h1>
     </div>
 
     <div class = "stats">
         <p>Time played:     x</p>
         <p>Guesses left:    x</p>
+        <p>Status: <span class = "status"></span></p>
     </div>
 
     <div class = "board">
@@ -110,7 +111,20 @@
             <div class = "pink">pink</div>
         </div>
     </div>
+    
+    <script>
+        const target = document.querySelector(".status");
+        const socket = new WebSocket("ws://localhost:3000");
 
+        socket.onmessage = function(event) {
+            target.innerHTML = event.data;
+        }
+
+        socket.onopen = function() {
+            socket.send("Attempting to join");
+            target.innerHTML = "Attempting to join...";
+        }
+    </script>
 
   </body>
 </html>
