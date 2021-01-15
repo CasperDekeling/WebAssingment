@@ -75,11 +75,12 @@ wss.on("connection", function (ws) {
   games[gameID].addPlayer(con);
   if(games[gameID].player1 == con){
     //If player 1 == con, then this player was added as player 1.
-    ws.send("You are player 1 - the combination maker");
+    ws.send("You are player 1 - the combination maker, now waiting for second player...");
   }
   else if(games[gameID].player2 == con){
     //If player 2 == con, then this player was added as player 2.
-    ws.send("You are player 2 - the guesser");
+    ws.send("You are player 2 - the guesser, game is starting...");
+    games[gameID].player1.send("Player 2 joined, game is starting...");
   }
   else {
     //If player 1 is not con, and player 2 isnt either, then the game was already full (or addPlayer didnt execute correctly), so player couldnt be added.
@@ -87,6 +88,9 @@ wss.on("connection", function (ws) {
   }
 
   ws.on("message", function incoming(message) {
+    if(message.includes("Guess = ")){
+      games[gameID].player1.send(message);
+    }
     console.log("[LOG] " + message);
   })
 })
