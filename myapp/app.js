@@ -18,6 +18,10 @@ const wss = new websocket.Server({ server });
 
 app.use(express.static(__dirname + "/public"));
 
+//Stats:
+let gamesStarted = 0;
+let gamesFinished = 0;
+let gamesOngoing = 0;
 
 function Game(gameID) {
   this.player1 = null;
@@ -91,6 +95,9 @@ wss.on("connection", function (ws) {
     ws.send("GameID = " + gameID);
     games[gameID].player1.send("Player 2 joined, game is starting...");
     games[gameID].player1.send("Create a combination.");
+
+    gamesStarted++;
+    gamesOngoing++;
   }
   else {
     //If player 1 is not con, and player 2 isnt either, then the game was already full (or addPlayer didnt execute correctly), so player couldnt be added.
@@ -118,11 +125,59 @@ wss.on("connection", function (ws) {
       let ratingTotal = parseInt(message.substring(24));
       games[tempID].player2.send(message.substring(15));
       games[tempID].player1.send(message.substring(15));
+
+      //If the rating is 20 (4 * green), then player 2 wins.
       if(ratingTotal == 20){
-        games[tempID].gameState = possibleStates[4];
+        games[tempID].gameState = games[tempID].possibleStates[4];
+        console.log("GameID = " + tempID + ": Player 2 won.");
         games[tempID].player2.send("Player 2 won.");
         games[tempID].player1.send("Player 2 won.");
+
+        gamesOngoing--;
+        gamesFinished++;
       }
+
+      //If the rating isn't 20, and there are no guesses left, player 1 wins.
+      else if(games[tempID].guessesLeft == 0){
+        games[tempID].gameState = games[tempID].possibleStates[3];
+        console.log("GameID = " + tempID + ": Player 1 won.");
+        games[tempID].player2.send("Player 1 won.");
+        games[tempID].player1.send("Player 1 won.");
+        
+        gamesOngoing--;
+        gamesFinished++;
+      }
+    }
+
+    if(message.includes("Aborting game.")){
+      //Abort game.
+      let tempID = parseInt(message.substring(9,13));
+      if(games[tempID].gameState != games[tempID].possibleStates[3] && games[tempID].gameState != games[tempID].possibleStates[4]){
+        games[tempID].gameState = games[tempID].possibleStates[5];
+        if(games[tempID].player1 != null){
+          games[tempID].player1.send("Game was aborted, because one of the players quit.");
+        }
+        if(games[tempID].player2 != null){
+          games[tempID].player2.send("Game was aborted, because one of the players quit.");
+        }
+      }
+
+      //Close connection of the player that didn't disconnect.
+      try {
+        games[tempID].player1.close();
+        games[tempID].player1 = null;
+      } catch (e) {
+        console.log("Player 1 closing: " + e);
+      }
+
+      try {
+        games[tempID].player2.close();
+        games[tempID].player2.playerB = null;
+      } catch (e) {
+        console.log("Player 2 closing: " + e);
+      }
+
+      gamesOngoing--;
     }
 
     console.log("[LOG] " + message);

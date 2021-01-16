@@ -8,6 +8,10 @@ board.hidden = true;
 let guessesLeft = 10;
 let player = null;
 
+window.onbeforeunload = function(){
+    socket.send("GameID = " + gameID + ", Aborting game.");
+ }
+
 document.querySelector(".guessSubmit").onclick = function() {
     //If player 2 submits their guess, puts all 4 pins into an array and sends it to the server (which sends it to player 1)
     //We are also using the currentGuess holes for player 1 to make a combination.
@@ -22,6 +26,13 @@ document.querySelector(".guessSubmit").onclick = function() {
     if(player == 1){
         document.querySelector(".combinationSpan").textContent = guess[0] + ", " + guess[1] + ", " + guess[2] + ", " + guess[3];
         socket.send("GameID = " + gameID + ", Combination = " + guess.toString());
+
+         //Hides the guessSubmit button from player 1 and disables the guess form.
+         disableEveryThing();
+
+        //Update status
+        target.innerHTML = "Waiting for opponent to make a guess...";
+        document.querySelector(".guessesLeft").textContent = guessesLeft;
     } else {
         //Update previous guesses.
         let whichHoles = 10 - guessesLeft;
@@ -31,6 +42,15 @@ document.querySelector(".guessSubmit").onclick = function() {
         holes[1].innerHTML = guess[1];
         holes[2].innerHTML = guess[2];
         holes[3].innerHTML = guess[3];    
+
+        disableEveryThing();
+
+        guessesLeft--;
+
+        document.querySelector(".guessesLeft").textContent = guessesLeft;
+
+        //Update status
+        target.innerHTML = "Waiting for opponent to rate guess...";
 
         socket.send("GameID = " + gameID + ", Guess = " + guess.toString());
     }
@@ -44,22 +64,30 @@ document.querySelector(".rateGuessSubmit").onclick = function() {
     totalRating += parseInt(ratings[0].value) + parseInt(ratings[1].value) + parseInt(ratings[2].value) + parseInt(ratings[3].value);
     socket.send("GameID = " + gameID + ", Rating = " + totalRating);
     document.querySelector(".rateGuess").hidden = true;
+
+    //Update status
+    target.innerHTML = "Waiting for opponent to make a guess...";
 }
 
 socket.onmessage = function(event) {
-    //Update status
-    target.innerHTML = event.data;
-
-
     if(event.data.includes("You are player 1")){
         //If the received message contains "You are player 1", then (obviously) you are player one, this is set in the player variable.
         player = 1;
+        
+        //Update status
+        target.innerHTML = event.data;
+
         //Hides the guessSubmit button from player 1
         document.querySelector(".guessSubmit").hidden = true;
-    }            
+    }   
+
     if(event.data.includes("You are player 2")) {
         //If the received message contains "You are player 2", then (obviously) you are player two, this is set in the player variable.
         player = 2; 
+
+        //Update status
+        target.innerHTML = event.data;
+
         document.querySelector(".combination").hidden = true;
     } 
 
@@ -71,13 +99,20 @@ socket.onmessage = function(event) {
     }
 
     if(event.data.includes("Start guessing.")){
-        //Unhides the board for player 2 when player 1 has made a combination and the game can start.y
+        //Unhides the board for player 2 when player 1 has made a combination and the game can start.
         board.hidden = false;
+
+        //Update status
+        target.innerHTML = "Make a guess.";
+        document.querySelector(".guessesLeft").textContent = guessesLeft;
     }
 
     if(event.data.includes("Create a combination.")){
-        document.querySelector(".currentGuessText").textContent = "Create a combination for the other player to guess:";
+        document.querySelector(".currentGuessText").hidden = false;
         document.querySelector(".guessSubmit").hidden = false;
+
+        //Update status
+        target.innerHTML = event.data;
     }
 
     if(event.data.includes("GameID = ")){
@@ -99,7 +134,7 @@ socket.onmessage = function(event) {
     }
 
     if(event.data.includes("Guess = ")){
-        //If the message contains "Guess = ", then this is the guess from the other player, forwarded by the server.
+        //If the message contains "Guess = ", then this is the guess from the opponent, forwarded by the server.
         //When this happens, take the substring which is just the guess, in the shape of an array (so without "Guess = ")
         //From this string, split it into an actual array.
         let guess = event.data.substring(8); 
@@ -108,11 +143,21 @@ socket.onmessage = function(event) {
         const rateGuess = document.querySelector(".rateGuess");
         const rateGuessSpan = document.querySelectorAll(".rateGuessShow");
 
+        const defaultRatings = document.querySelectorAll(".redRating");
+        for(let i = 0; i < 4; i++){
+            defaultRatings[i].selected = "selected";
+        }
+
         rateGuess.hidden = false;
         rateGuessSpan[0].textContent = guessArray[0];
         rateGuessSpan[1].textContent = guessArray[1];
         rateGuessSpan[2].textContent = guessArray[2];
         rateGuessSpan[3].textContent = guessArray[3];
+
+        //Update status
+        target.innerHTML = "Rate the guess.";
+
+        document.querySelector(".guessesLeft").textContent = guessesLeft;
 
         //Update previous guesses.
         let whichHoles = 9 - guessesLeft;
@@ -150,10 +195,43 @@ socket.onmessage = function(event) {
             }
             if(i < 3) ratingSplit += ", "
         }
+
+        if(player == 2){
+            //Update status
+            target.innerHTML = "Make a guess";
+            enableEveryThing();
+        }
+
         //Select the right rating out of the 10 previous guess slots that are on the board.
         let whichPrevGuess = 9 - guessesLeft;
         let selectRightPrevGuess = ".prevGuess" + whichPrevGuess + " .rating";
         document.querySelector(selectRightPrevGuess).innerHTML = "Rating: " + ratingSplit;
+    }
+
+    if(event.data.includes("Player 1 won")){
+        if(player == 1){
+            target.innerHTML = "You win!";
+        }
+        else{
+            //When the game is finished, disable the guess form for player 2.
+            target.innerHTML = "You lose!";
+            disableEveryThing();
+        }
+    }
+
+    if(event.data.includes("Player 2 won")){
+        if(player == 1){
+            target.innerHTML = "You lose!";
+        }
+        else{
+            //When the game is finished, disable the guess form for player 2.
+            target.innerHTML = "You win!";
+            disableEveryThing();
+        }
+    }
+
+    if(event.data.includes("Game was aborted")){
+        target.innerHTML = event.data;
     }
 }
 
@@ -161,4 +239,21 @@ socket.onopen = function() {
     //Attempts to join a game once the connection is open.
     socket.send("Attempting to join");
     target.innerHTML = "Attempting to join...";
+}
+
+function disableEveryThing(){
+    document.querySelector(".guessSubmit").hidden = true;
+    document.querySelector(".currentGuessText").hidden = true;
+    document.getElementById("hole1").disabled = true;
+    document.getElementById("hole2").disabled = true;
+    document.getElementById("hole3").disabled = true;
+    document.getElementById("hole4").disabled = true;
+}
+
+function enableEveryThing(){
+    document.querySelector(".guessSubmit").hidden = false;
+    document.getElementById("hole1").disabled = false;
+    document.getElementById("hole2").disabled = false;
+    document.getElementById("hole3").disabled = false;
+    document.getElementById("hole4").disabled = false;
 }
