@@ -24,6 +24,7 @@ function Game(gameID) {
   this.player2 = null;
   this.id = gameID;
   this.combination = null;
+  this.guessesLeft = 10;
 
   this.possibleStates = ["NoPlayers", "1Player", "2Players", "1Won", "2Won", "Aborted"];
   this.gameState = this.possibleStates[0];
@@ -66,6 +67,10 @@ wss.on("connection", function (ws) {
   if(games[gameID].gameState != games[gameID].possibleStates[0] && games[gameID].gameState != games[gameID].possibleStates[1]){
     //If the current game is full (so the gamestate is not "NoPlayers" or "1Player"), it adds a new game to the array, and that is now the current game.
     gameID++;
+    if(gameID >= 9999){
+      ws.send("Can't create a new game, limit reached.");
+      return;
+    }
     games.push(new Game(gameID));
   }
   //Every player gets their own ID
@@ -78,11 +83,14 @@ wss.on("connection", function (ws) {
   if(games[gameID].player1 == con){
     //If player 1 == con, then this player was added as player 1.
     ws.send("You are player 1 - the combination maker, now waiting for second player...");
+    ws.send("GameID = " + gameID);
   }
   else if(games[gameID].player2 == con){
     //If player 2 == con, then this player was added as player 2.
     ws.send("You are player 2 - the guesser, game is starting...");
+    ws.send("GameID = " + gameID);
     games[gameID].player1.send("Player 2 joined, game is starting...");
+    games[gameID].player1.send("Create a combination.");
   }
   else {
     //If player 1 is not con, and player 2 isnt either, then the game was already full (or addPlayer didnt execute correctly), so player couldnt be added.
@@ -92,8 +100,31 @@ wss.on("connection", function (ws) {
   ws.on("message", function incoming(message) {
     //If the incoming message starts with "Guess = ", this is followed by the guess of player 2, which gets forwarded directly to player 1 to rate.
     if(message.includes("Guess = ")){
-      games[gameID].player1.send(message);
+      let tempID = parseInt(message.substring(9,13));
+      games[tempID].guessesLeft--;
+      games[tempID].player1.send("GuessesLeft = " + games[tempID].guessesLeft);
+      games[tempID].player2.send("GuessesLeft = " + games[tempID].guessesLeft);
+      games[tempID].player1.send(message.substring(15));
     }
+
+    if(message.includes("Combination = ")){
+      let tempID = parseInt(message.substring(9,13));
+      games[tempID].combination = message.substring(28).split(",");
+      games[tempID].player2.send("Start guessing.");
+    }
+
+    if(message.includes("Rating = ")){
+      let tempID = parseInt(message.substring(9,13));
+      let ratingTotal = parseInt(message.substring(24));
+      games[tempID].player2.send(message.substring(15));
+      games[tempID].player1.send(message.substring(15));
+      if(ratingTotal == 20){
+        games[tempID].gameState = possibleStates[4];
+        games[tempID].player2.send("Player 2 won.");
+        games[tempID].player1.send("Player 2 won.");
+      }
+    }
+
     console.log("[LOG] " + message);
   })
 })
