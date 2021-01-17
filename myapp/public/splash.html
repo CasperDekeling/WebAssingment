@@ -10,8 +10,9 @@
   <body>
 
     <div class = "stats">
-        <p>Games played: x</p>
-        <p>Games ongoing: x</p>
+        <p>Games started: <span class = "gamesStarted">[Not yet implemented]</span></p>
+        <p>Games finished: <span class = "gamesFinished">[Not yet implemented]</span></p>
+        <p>Games ongoing: <span class = "gamesOngoing">[Not yet implemented]</span></p>
     </div>
 
     <div class = "rules">
@@ -40,6 +41,14 @@
     <div class = "logo">
       <img src = "images/MasterMindLogo.png" alt = "logo">
     </div>
+
+    <script>
+      const socket = new WebSocket("ws://localhost:3000");
+
+      socket.onopen = function() {
+        socket.send("Requesting stats.");
+      }
+    </script>
 
   </body>
 </html>

@@ -15,90 +15,181 @@
     </div>
 
     <div class = "stats">
-        <p>Time played:     x</p>
-        <p>Guesses left:    x</p>
+        <p>Game ID:     <span class = "gameID"></span></p>
+        <p>Guesses left:    <span class = "guessesLeft">N/A</span></p>
         <p>Status: <span class = "status"></span></p>
+        <p class = "combination">Combination: <span class = "combinationSpan"></span></p>
     </div>
 
+    
     <div class = "board">
+        <div class = "rate">
+            <form class = "rateGuessForm">
+                <ul class = "rateGuess" hidden = true>
+                    <li>
+                        <span class = "rateGuessShow"></span>
+                        <select name = "rating" id = "rating">
+                            <option value = "5">Green</option>
+                            <option value = "1">Yellow</option>
+                            <option value = "0" class = "redRating">Red</option>
+                        </select>
+                    </li>
+                    <li>
+                        <span class = "rateGuessShow"></span>
+                        <select name = "rating" id = "rating">
+                            <option value = "5">Green</option>
+                            <option value = "1">Yellow</option>
+                            <option value = "0" class = "redRating">Red</option>
+                        </select>
+                    </li>
+                    <li>
+                        <span class = "rateGuessShow"></span>
+                        <select name = "rating" id = "rating">
+                            <option value = "5">Green</option>
+                            <option value = "1">Yellow</option>
+                            <option value = "0" class = "redRating">Red</option>
+                        </select>
+                    </li>
+                    <li>
+                        <span class = "rateGuessShow"></span>
+                        <select name = "rating" id = "rating">
+                            <option value = "5">Green</option>
+                            <option value = "1">Yellow</option>
+                            <option value = "0" class = "redRating">Red</option>
+                        </select>
+                    </li>
+                    <input type = "button" value = "Submit rating" class = "rateGuessSubmit">
+                </ul>
+            </form>
+        </div>
         <div class = "previousGuesses">
-            <div class = "prevGuess">
+            <div class = "prevGuess9">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess8">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess7">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess6">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess5">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess4">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess3">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess2">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess1">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
-            <div class = "prevGuess">
+            <div class = "prevGuess0">
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "hole">h</div>
                 <div class = "rating">r</div>
+                <p></p>
             </div>
         </div>
 
         <div class = "currentGuess">
-            <div class = "hole">h</div>
-            <div class = "hole">h</div>
-            <div class = "hole">h</div>
-            <div class = "hole">h</div>
+            <h3 class = "currentGuessText" hidden = true>Create a combination for the opponent to guess:</h3>
+            <form class = "formGuess">
+                <select id = "hole1" name = "hole1">
+                    <option value = "red">          red         </option>
+                    <option value = "orange">       orange      </option>
+                    <option value = "yellow">       yellow      </option>
+                    <option value = "green">        green       </option>
+                    <option value = "lightblue">    lightblue   </option>
+                    <option value = "blue">         blue        </option>
+                    <option value = "purple">       purple      </option>
+                    <option value = "pink">         pink        </option>
+                </select>
+                <select id = "hole2" name = "hole2">
+                    <option value = "red">          red         </option>
+                    <option value = "orange">       orange      </option>
+                    <option value = "yellow">       yellow      </option>
+                    <option value = "green">        green       </option>
+                    <option value = "lightblue">    lightblue   </option>
+                    <option value = "blue">         blue        </option>
+                    <option value = "purple">       purple      </option>
+                    <option value = "pink">         pink        </option>
+                </select>
+                <select id = "hole3" name = "hole3">
+                    <option value = "red">          red         </option>
+                    <option value = "orange">       orange      </option>
+                    <option value = "yellow">       yellow      </option>
+                    <option value = "green">        green       </option>
+                    <option value = "lightblue">    lightblue   </option>
+                    <option value = "blue">         blue        </option>
+                    <option value = "purple">       purple      </option>
+                    <option value = "pink">         pink        </option>
+                </select>
+                <select id = "hole4" name = "hole4">
+                    <option value = "red">          red         </option>
+                    <option value = "orange">       orange      </option>
+                    <option value = "yellow">       yellow      </option>
+                    <option value = "green">        green       </option>
+                    <option value = "lightblue">    lightblue   </option>
+                    <option value = "blue">         blue        </option>
+                    <option value = "purple">       purple      </option>
+                    <option value = "pink">         pink        </option>
+                </select>
+                <input type = "button" value = "Submit" class = "guessSubmit">
+            </form>
         </div>
         <div class = "pins">
             <div class = "red">red</div>
@@ -112,19 +203,8 @@
         </div>
     </div>
     
-    <script>
-        const target = document.querySelector(".status");
-        const socket = new WebSocket("ws://localhost:3000");
-
-        socket.onmessage = function(event) {
-            target.innerHTML = event.data;
-        }
-
-        socket.onopen = function() {
-            socket.send("Attempting to join");
-            target.innerHTML = "Attempting to join...";
-        }
-    </script>
+    
+    <script src = "javascripts/gamePage.js"></script>
 
   </body>
 </html>
