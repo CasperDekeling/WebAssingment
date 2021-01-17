@@ -213,8 +213,8 @@ socket.onmessage = function(event) {
             target.innerHTML = "You win!";
         }
         else{
-            //When the game is finished, disable the guess form for player 2.
-            target.innerHTML = "You lose!";
+            //When the game is finished, disable the guess form for player 2. 
+            target.innerHTML = "You lose!\nThe combination was: " + event.data.substring(28);
             disableEveryThing();
         }
     }

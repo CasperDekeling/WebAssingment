@@ -1,0 +1,36 @@
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: rgb(27, 25, 46);
+    color: white;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 4fr 6fr;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    margin: 0px 0px 0px 0px;
+    position: absolute;
+  }
+
+.previousGuesses, .currentGuess{
+    background-color: rgb(87, 47, 20);
+    width: 50%;
+}
+
+.previousGuesses {
+    display: grid;
+    grid-template-columns: 1fr;
+    border: 5px solid black;
+    grid-template-rows: repeat(10, 1fr);
+    border-bottom-style: none;
+}
+
+.currentGuess {
+    border: 5px solid black;
+}
+
+.previousGuesses > div{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 1fr;
+}
