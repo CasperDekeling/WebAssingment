@@ -12,25 +12,119 @@ body {
     position: absolute;
   }
 
+.board {
+    width: 18vw;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 10fr 1fr 2fr;
+}
+
 .previousGuesses, .currentGuess{
     background-color: rgb(87, 47, 20);
-    width: 50%;
+    border: 5px solid black;
+    width: 100%;
 }
 
 .previousGuesses {
     display: grid;
     grid-template-columns: 1fr;
-    border: 5px solid black;
     grid-template-rows: repeat(10, 1fr);
     border-bottom-style: none;
 }
 
 .currentGuess {
-    border: 5px solid black;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
 }
+
+
+.currentGuess::before {
+    content: 'Create a combination for the opponent to guess:';
+    position: absolute;
+}
+
 
 .previousGuesses > div{
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: 1fr;
+}
+
+.hole, .pins > div, .currentGuess > div {
+    border-radius: 50%;
+    padding: auto auto auto auto;
+    padding-bottom: 100%;
+    position: relative;
+    transform: scale(0.3);
+    box-sizing: border-box;
+}
+
+.hole {
+    background-color: black;
+}
+
+.rating {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 35%;
+    height: 35%;
+    margin: auto auto auto auto;
+}
+
+
+.rating > div {
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    background-color: white;
+    padding-bottom: 100%;
+    position: relative;
+}
+
+.rating > div:nth-child(2n){
+    border-right: 1px solid black;
+}
+
+.rating > div:nth-of-type(n+3){
+    border-bottom: 1px solid black;
+}
+
+.pins {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr 1fr;
+}
+
+.red {
+    background-color: red;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.green {
+    background-color: green;
+}
+
+.lightblue {
+    background-color: cyan;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.purple {
+    background-color: purple;
+}
+
+.pink {
+    background-color: pink;
 }

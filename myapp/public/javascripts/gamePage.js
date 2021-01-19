@@ -8,11 +8,53 @@ board.hidden = true;
 let guessesLeft = 10;
 let player = null;
 
+let currentColour;
+
+// const red = document.querySelector(".red");
+// const hole = document.getElementById("aa");
+
+const guessHoles = document.querySelectorAll(".currentGuess > div");
+guessHoles.forEach(addEventListenersHoles);
+
+const pins = document.querySelectorAll(".pins > div");
+pins.forEach(addEventListenersPins);
+
+function addEventListenersHoles(item, index) {
+    item.addEventListener("dragover", function(event){
+        event.preventDefault();
+    })
+
+    item.addEventListener("drop", function(event){
+        event.preventDefault();
+        event.target.style.backgroundColor = currentColour;
+    })
+}
+
+function addEventListenersPins(item, index) {
+    item.addEventListener("dragstart", function(event){
+        currentColour = event.target.className;
+    })
+}
+
+// red.addEventListener("dragstart", function(event){
+//     currentColour = event.target.className;
+// })
+
+// hole.addEventListener("dragover", function(event){
+//     event.preventDefault();
+// })
+
+// hole.addEventListener("drop", function(event){
+//     event.preventDefault();
+//     event.target.style.backgroundColor = currentColour;
+// })
+
 window.onbeforeunload = function(){
     socket.send("GameID = " + gameID + ", Aborting game.");
  }
 
-document.querySelector(".guessSubmit").onclick = function() {
+/*
+//document.querySelector(".guessSubmit").onclick = function() {
     //If player 2 submits their guess, puts all 4 pins into an array and sends it to the server (which sends it to player 1)
     //We are also using the currentGuess holes for player 1 to make a combination.
     let hole1 = document.getElementById("hole1");
@@ -55,6 +97,7 @@ document.querySelector(".guessSubmit").onclick = function() {
         socket.send("GameID = " + gameID + ", Guess = " + guess.toString());
     }
 }
+*/
 
 document.querySelector(".rateGuessSubmit").onclick = function() {
     //If player 1 submits their rating of the guess, all 4 values are added to a total value (where green = 5, yellow = 1, red = 0)
@@ -78,7 +121,7 @@ socket.onmessage = function(event) {
         target.innerHTML = event.data;
 
         //Hides the guessSubmit button from player 1
-        document.querySelector(".guessSubmit").hidden = true;
+        //document.querySelector(".guessSubmit").hidden = true;
     }   
 
     if(event.data.includes("You are player 2")) {
@@ -109,7 +152,7 @@ socket.onmessage = function(event) {
 
     if(event.data.includes("Create a combination.")){
         document.querySelector(".currentGuessText").hidden = false;
-        document.querySelector(".guessSubmit").hidden = false;
+        //document.querySelector(".guessSubmit").hidden = false;
 
         //Update status
         target.innerHTML = event.data;
@@ -243,7 +286,7 @@ socket.onopen = function() {
 
 function disableEveryThing(){
     //Stops player from guessing by disabling the whole form.
-    document.querySelector(".guessSubmit").hidden = true;
+    //document.querySelector(".guessSubmit").hidden = true;
     document.querySelector(".currentGuessText").hidden = true;
     document.getElementById("hole1").disabled = true;
     document.getElementById("hole2").disabled = true;
@@ -253,7 +296,7 @@ function disableEveryThing(){
 
 function enableEveryThing(){
     //Re-enables form so player can guess again.
-    document.querySelector(".guessSubmit").hidden = false;
+    //document.querySelector(".guessSubmit").hidden = false;
     document.getElementById("hole1").disabled = false;
     document.getElementById("hole2").disabled = false;
     document.getElementById("hole3").disabled = false;

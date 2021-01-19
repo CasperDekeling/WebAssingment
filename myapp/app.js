@@ -118,6 +118,7 @@ wss.on("connection", function (ws) {
     if(message.includes("Aborting game.")){
       //Abort game.
       let tempID = parseInt(message.substring(9,13));
+      if(tempID <= gameID){
       if(games[tempID].gameState != games[tempID].possibleStates[3] && games[tempID].gameState != games[tempID].possibleStates[4]){
         games[tempID].gameState = games[tempID].possibleStates[5];
         if(games[tempID].player1 != null){
@@ -127,6 +128,7 @@ wss.on("connection", function (ws) {
           games[tempID].player2.send("Game was aborted, because one of the players quit.");
         }
       }
+    }
 
       //Close connection of the player that didn't disconnect.
       try {
