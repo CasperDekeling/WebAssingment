@@ -242,6 +242,7 @@ socket.onopen = function() {
 }
 
 function disableEveryThing(){
+    //Stops player from guessing by disabling the whole form.
     document.querySelector(".guessSubmit").hidden = true;
     document.querySelector(".currentGuessText").hidden = true;
     document.getElementById("hole1").disabled = true;
@@ -251,6 +252,7 @@ function disableEveryThing(){
 }
 
 function enableEveryThing(){
+    //Re-enables form so player can guess again.
     document.querySelector(".guessSubmit").hidden = false;
     document.getElementById("hole1").disabled = false;
     document.getElementById("hole2").disabled = false;
