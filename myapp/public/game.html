@@ -13,8 +13,8 @@
     <div class = "logoAndStats">
         <div class = "logo">
             <img src = "images/MasterMindLogo.png">
-            <h1>MasterMind</h1>
         </div>
+        <h1>MasterMind</h1>
 
         <div class = "stats">
             <p>Game ID:     <span class = "gameID"></span></p>
@@ -26,45 +26,6 @@
 
     
     <div class = "board">
-        <div class = "rate">
-            <form class = "rateGuessForm">
-                <ul class = "rateGuess" hidden = true>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <input type = "button" value = "Submit rating" class = "rateGuessSubmit">
-                </ul>
-            </form>
-        </div>
         <div class = "previousGuesses">
             <div class = "prevGuess9">
                 <div class = "hole"></div>
@@ -189,55 +150,53 @@
         </div>
 
         <div class = "currentGuess">
-            <div class = "hole" id = "aa"></div>
+            <div class = "hole"></div>
             <div class = "hole"></div>
             <div class = "hole"></div>
             <div class = "hole"></div>
             <!--
-            <form class = "formGuess">
-                <select id = "hole1" name = "hole1">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <select id = "hole2" name = "hole2">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <select id = "hole3" name = "hole3">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <select id = "hole4" name = "hole4">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <input type = "button" value = "Submit" class = "guessSubmit">
-            </form>
-        -->
+            <div class = "rate">
+                <form class = "rateGuessForm">
+                    <ul class = "rateGuess" hidden = true>
+                        <li>
+                            <span class = "rateGuessShow"></span>
+                            <select name = "rating" id = "rating">
+                                <option value = "5">Green</option>
+                                <option value = "1">Yellow</option>
+                                <option value = "0" class = "redRating">Red</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span class = "rateGuessShow"></span>
+                            <select name = "rating" id = "rating">
+                                <option value = "5">Green</option>
+                                <option value = "1">Yellow</option>
+                                <option value = "0" class = "redRating">Red</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span class = "rateGuessShow"></span>
+                            <select name = "rating" id = "rating">
+                                <option value = "5">Green</option>
+                                <option value = "1">Yellow</option>
+                                <option value = "0" class = "redRating">Red</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span class = "rateGuessShow"></span>
+                            <select name = "rating" id = "rating">
+                                <option value = "5">Green</option>
+                                <option value = "1">Yellow</option>
+                                <option value = "0" class = "redRating">Red</option>
+                            </select>
+                        </li>
+                        <input type = "button" value = "Submit rating" class = "rateGuessSubmit">
+                    </ul>
+                </form>
+            </div>
+            -->
+            <input type = "button" value = "Submit" class = "ratingSubmit">
+            <input type = "button" value = "Submit" class = "guessSubmit">
         </div>
 
         <div class = "pins">
@@ -251,6 +210,7 @@
             <div class = "pink" draggable = "true"></div>
             
         </div>
+
 
         
     </div>
