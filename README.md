@@ -6,3 +6,4 @@ zooming out a tiny bit tends to fix it.
 
 Was made for Chrome, but also works in Firefox.
 
+Works best on large screen, but is still playable on smaller screens.
