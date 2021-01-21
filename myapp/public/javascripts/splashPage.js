@@ -1,4 +1,5 @@
 function sound(src) {
+    //Constructor for sound object.
     this.sound = document.createElement("audio");
     this.sound.src = src;
     this.sound.setAttribute("preload", "auto");
@@ -13,13 +14,16 @@ function sound(src) {
     }
   }
 
+//Sound for the image animation
 const imgSound = new sound("../sounds/wee.m4a");
 
 
+//When clicking on the window, start the sound.
 document.querySelector("img").onmousedown = function() {
     imgSound.play();
 }
 
+//When letting go (and therefore stopping the animation), stop the sound.
 document.querySelector("img").onmouseup = function() {
     imgSound.stop();
 }

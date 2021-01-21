@@ -11,7 +11,7 @@ const app = express();
 app.get("/game", indexRouter);
 app.get("/play", indexRouter);
 
-
+//Using ejs for templating.
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
@@ -29,6 +29,7 @@ app.get("/", (req, res) => {
   });
 });
 
+//TODO: move to routes.
 app.get("/splash", (req, res) => {
   if(gamesOngoing < 0) gamesOngoing = 0;
   let currentDate = new Date();
@@ -52,6 +53,7 @@ let gamesStarted = 0;
 let gamesFinished = 0;
 let gamesOngoing = 0;
 
+//Import game obj from game.js
 let Game = require("./game")
 
 let gameID = 0;
@@ -80,12 +82,12 @@ wss.on("connection", function (ws) {
 
   games[gameID].addPlayer(con);
   if(games[gameID].player1 == con){
-    //If player 1 == con, then this player was added as player 1.
+    //If player 1 == con, that means this player was added as player 1.
     ws.send("You are player 1 - the combination maker, now waiting for second player...");
     ws.send("GameID = " + gameID);
   }
   else if(games[gameID].player2 == con){
-    //If player 2 == con, then this player was added as player 2.
+    //If player 2 == con, that means this player was added as player 2.
     ws.send("You are player 2 - the guesser, game is starting...");
     ws.send("GameID = " + gameID);
     games[gameID].player1.send("Player 2 joined, game is starting...");
@@ -97,8 +99,10 @@ wss.on("connection", function (ws) {
   }
 
   ws.on("message", function incoming(message) {
-    //If the incoming message starts with "Guess = ", this is followed by the guess of player 2, which gets forwarded directly to player 1 to rate.
+    //Every message that the client sends starts with "GameID = xxxx", where xxxx is the game id of that game (e.g 0004).
+    //The server uses this line to find the game belonging to that ID, and thus to that client.
     if(message.includes("Guess = ")){
+      //If the incoming message contains "Guess = ", this is followed by the guess of player 2, which gets forwarded directly to player 1 to rate.
       let tempID = parseInt(message.substring(9,13));
       games[tempID].guessesLeft--;
       games[tempID].player1.send("GuessesLeft = " + games[tempID].guessesLeft);
@@ -107,6 +111,8 @@ wss.on("connection", function (ws) {
     }
 
     if(message.includes("Combination = ")){
+      //If the incoming message contains "Combination =", this is followed by the combination for this game, made by player 1. This gets stored in the game obj.
+      //Also sends a message to player 2 that they can start guessing.
       let tempID = parseInt(message.substring(9,13));
       games[tempID].combination = message.substring(28).split(",");
       games[tempID].player2.send("Start guessing.");
@@ -118,6 +124,7 @@ wss.on("connection", function (ws) {
     }
 
     if(message.includes("Rating = ")){
+      //If the incoming message contains "Rating =", then this is followed by the rating of player 1. This rating gets forwarded to player 2.
       let tempID = parseInt(message.substring(9,13));
       let ratingTotal = parseInt(message.substring(24));
       games[tempID].player2.send(message.substring(15));
@@ -152,6 +159,7 @@ wss.on("connection", function (ws) {
       if(tempID <= gameID){
       if(games[tempID].gameState != games[tempID].possibleStates[3] && games[tempID].gameState != games[tempID].possibleStates[4]){
         games[tempID].gameState = games[tempID].possibleStates[5];
+        //Sends message to the player that hasn't quit, that the other player left.
         if(games[tempID].player1 != null){
           games[tempID].player1.send("Game was aborted, because one of the players quit.");
         }
