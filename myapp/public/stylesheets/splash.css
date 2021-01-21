@@ -22,6 +22,7 @@ a {
 .rules {
   padding-left: 5%;
   padding-right: 5%;
+  
 }
 
 form {
@@ -36,8 +37,12 @@ form {
 }
 
 .stats {
-  padding-top: 3%;
-  padding-bottom: 5%;
+  background-color: rgb(18, 16, 31);
+  border: 5px solid magenta;
+  padding: 1vh 1vh 1vh 1vh;
+  position: absolute;
+  margin-top: 5vh;
+  margin-left: 5vh;
 }
 
 li {
@@ -71,6 +76,22 @@ input {
   font-weight: bold;
 }
 
+.resolutionAlert {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: red;
+  text-align: center;
+  z-index: 1;
+}
+
+
+
+@media (min-height: 768px) and (min-width: 1366px){
+  .resolutionAlert {
+      visibility: hidden; 
+  }
+}
 
 input:hover {
   animation: rainbowWave 0.5s linear infinite;
@@ -219,8 +240,10 @@ img:active {
     font-size: 130%;
   }
 
-  .rules{
+  .rules, .stats{
     font-size: 140%;
   }
 }
+
+
 

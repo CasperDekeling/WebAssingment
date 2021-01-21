@@ -10,6 +10,20 @@ let player = null;
 
 const holesCG = document.querySelectorAll(".currentGuess > .hole");
 
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+      this.sound.play();
+    }
+    this.stop = function(){
+      this.sound.pause();
+    }
+  }
 
 let currentColour;
 
@@ -26,6 +40,8 @@ function addEventListenersHoles(item, index) {
 
     item.addEventListener("drop", function(event){
         event.preventDefault();
+        const clickSound = new sound("../sounds/click.m4a");
+        clickSound.play();
         if(document.querySelector(".guessesLeft").textContent != "N/A" && player == 1){
             if(event.target.style.backgroundColor == "red" && currentColour == "red"){
                 currentColour = "maroon";
@@ -47,23 +63,55 @@ function addEventListenersHoles(item, index) {
 function addEventListenersPins(item, index) {
     item.addEventListener("dragstart", function(event){
         currentColour = event.target.className;
+        const clickSound = new sound("../sounds/click.m4a");
+        clickSound.play();
     })
 }
 
+const imgSound = new sound("../sounds/wee.m4a");
+
+
+document.querySelector(".MMLogo").onmousedown = function() {
+    imgSound.play();
+}
+
+document.querySelector(".MMLogo").onmouseup = function() {
+    imgSound.stop();
+}
 
 window.onbeforeunload = function(){
     socket.send("GameID = " + gameID + ", Aborting game.");
  }
 
+ document.querySelector(".buttonHelp").onclick = function() {
+     console.log("aaaa");
+     if(document.querySelector(".rules").hidden == true){
+        document.querySelector(".rules").hidden = false;
+     }
+     else {
+        document.querySelector(".rules").hidden = true;
+     }
+ }
 
 document.querySelector(".guessSubmit").onclick = function() {
     //If player 2 submits their guess, puts all 4 pins into an array and sends it to the server (which sends it to player 1)
     //We are also using the currentGuess holes for player 1 to make a combination.
-    let hole1 = holesCG[0].style.backgroundColor;
-    let hole2 = holesCG[1].style.backgroundColor;
-    let hole3 = holesCG[2].style.backgroundColor;
-    let hole4 = holesCG[3].style.backgroundColor;
-    let guess = [hole1, hole2, hole3, hole4];
+    let hole1 = "";
+    let hole2 = "";
+    let hole3 = "";
+    let hole4 = "";
+    hole1 = holesCG[0].style.backgroundColor;
+    hole2 = holesCG[1].style.backgroundColor;
+    hole3 = holesCG[2].style.backgroundColor;
+    hole4 = holesCG[3].style.backgroundColor;
+    guess = [hole1, hole2, hole3, hole4];
+    console.log("guess: " + guess[0] + guess[1] + guess[2] + guess[3]);
+
+
+    if(!checkSubmit(guess)){
+        window.alert("All holes have to be filled in!");
+        return;
+    }
 
     //If the player is player1, then instead of sending these pins as a guess, send it as a combination.
     //The only difference in code between submitting as p1 and p2 is that p1 sends a slightly different message to the server, and nothing is added to the prevGuesses.
@@ -280,10 +328,18 @@ socket.onmessage = function(event) {
     if(event.data.includes("Player 1 won")){
         if(player == 1){
             target.innerHTML = "You win!";
+
+            //Play victory sound effect
+            const winSound = new sound("../sounds/win.m4a");
+            winSound.play();
         }
         else{
             //When the game is finished, disable the guess form for player 2. 
             target.innerHTML = "You lose!\nThe combination was: " + event.data.substring(28);
+
+            //Play loss sound effect
+            const loseSound = new sound("../sounds/lose.m4a");
+            loseSound.play();
         }
         disableEveryThing();
     }
@@ -291,16 +347,26 @@ socket.onmessage = function(event) {
     if(event.data.includes("Player 2 won")){
         if(player == 1){
             target.innerHTML = "You lose!";
+
+            //Play loss sound effect
+            const loseSound = new sound("../sounds/lose.m4a");
+            loseSound.play();
         }
         else{
             //When the game is finished, disable the guess form for player 2.
             target.innerHTML = "You win!";
+            
+            //Play victory sound effect
+            const winSound = new sound("../sounds/win.m4a");
+            winSound.play();
         }
         disableEveryThing();
     }
 
     if(event.data.includes("Game was aborted")){
         target.innerHTML = event.data;
+        const abortSound = new sound("../sounds/abort.m4a");
+        abortSound.play();
     }
 }
 
@@ -314,15 +380,15 @@ function disableEveryThing(){
     //Stops player from guessing by disabling the whole form.
     document.querySelector(".guessSubmit").hidden = true;
     document.querySelector(".ratingSubmit").hidden = true;
-    pins[0].draggable = false;
-    pins[1].draggable = false;
-    pins[2].draggable = false;
+    pins[0].style.visibility = "hidden";
+    pins[1].style.visibility = "hidden";
+    pins[2].style.visibility = "hidden";
     if(player == 2){
-        pins[3].draggable = false;
-        pins[4].draggable = false;
-        pins[5].draggable = false;
-        pins[6].draggable = false;
-        pins[7].draggable = false;
+        pins[3].style.visibility = "hidden";
+        pins[4].style.visibility = "hidden";
+        pins[5].style.visibility = "hidden";
+        pins[6].style.visibility = "hidden";
+        pins[7].style.visibility = "hidden";
     }
 }
 
@@ -333,16 +399,33 @@ function enableEveryThing(){
         whichButtonEnable = ".ratingSubmit";
     }
     document.querySelector(whichButtonEnable).hidden = false;
-    pins[0].draggable = true;
-    pins[1].draggable = true;
-    pins[2].draggable = true;
+    pins[0].style.visibility = "visible";
+    pins[1].style.visibility = "visible";
+    pins[2].style.visibility = "visible";
     if(player == 2){
-        pins[3].draggable = true;
-        pins[4].draggable = true;
-        pins[5].draggable = true;
-        pins[6].draggable = true;
-        pins[7].draggable = true;
+        pins[3].style.visibility = "visible";
+        pins[4].style.visibility = "visible";
+        pins[5].style.visibility = "visible";
+        pins[6].style.visibility = "visible";
+        pins[7].style.visibility = "visible";
     }
+}
+
+function checkSubmit(array) {
+    //Checks whether all of the holes of the guess have been filled in. If they have, return true. If not, return false.
+    if(array[0] == "" || array[0] == "black") {
+        return false;
+    }
+    if(array[1] == "" || array[1] == "black") {
+        return false;
+    }
+    if(array[2] == "" || array[2] == "black") {
+        return false;
+    }
+    if(array[3] == "" || array[3] == "black") {
+        return false;
+    }
+    return true;
 }
 
 

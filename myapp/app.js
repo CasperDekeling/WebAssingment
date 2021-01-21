@@ -8,10 +8,39 @@ const port = process.argv[2];
 const app = express();
 
 //Routes
-app.get("/", indexRouter);
 app.get("/game", indexRouter);
 app.get("/play", indexRouter);
-app.get("/splash", indexRouter);
+
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+
+//TODO: move to routes.
+app.get("/", (req, res) => {
+  if(gamesOngoing < 0) gamesOngoing = 0;
+  let currentDate = new Date();
+  let date = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear() + " @ " + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+  res.render("splash.ejs", {
+    gamesStarted: gamesStarted,
+    gamesFinished: gamesFinished,
+    gamesOngoing: gamesOngoing,
+    date: date
+  });
+});
+
+app.get("/splash", (req, res) => {
+  if(gamesOngoing < 0) gamesOngoing = 0;
+  let currentDate = new Date();
+  let date = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear() + " @ " + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+  res.render("splash.ejs", {
+    gamesStarted: gamesStarted,
+    gamesFinished: gamesFinished,
+    gamesOngoing: gamesOngoing,
+    date: date
+  });
+});
+
 
 const server = http.createServer(app);
 const wss = new websocket.Server({ server });
@@ -61,9 +90,6 @@ wss.on("connection", function (ws) {
     ws.send("GameID = " + gameID);
     games[gameID].player1.send("Player 2 joined, game is starting...");
     games[gameID].player1.send("Create a combination.");
-
-    gamesStarted++;
-    gamesOngoing++;
   }
   else {
     //If player 1 is not con, and player 2 isnt either, then the game was already full (or addPlayer didnt execute correctly), so player couldnt be added.
@@ -84,6 +110,11 @@ wss.on("connection", function (ws) {
       let tempID = parseInt(message.substring(9,13));
       games[tempID].combination = message.substring(28).split(",");
       games[tempID].player2.send("Start guessing.");
+
+      //Game is considered 'ongoing'/'started' when the combination has been made.
+      gamesOngoing++;
+      gamesStarted++;
+
     }
 
     if(message.includes("Rating = ")){
@@ -145,7 +176,9 @@ wss.on("connection", function (ws) {
         console.log("Player 2 closing: " + e);
       }
 
-      gamesOngoing--;
+        if(games[tempID].combination != null){
+          gamesOngoing--;
+        }
     }
 
     console.log("[LOG] " + message);

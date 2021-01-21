@@ -12,12 +12,13 @@
     <div class = "resolutionAlert">
       <h2>Your resolution is too small!</h2>
     </div>
+    <div class = "stats">
+      <p>Games started: <%= gamesStarted %></p>
+      <p>Games finished: <%= gamesFinished %></p>
+      <p>Games ongoing: <%= gamesOngoing %></p>
+      <p>As of: <%= date %></p>
+    </div>
     <div class = "rules">
-      <div class = "stats">
-        <p>Resolution <span class = "gamesStarted">[Not aaa implemented]</span></p>
-        <p>Games finished: <span class = "gamesFinished">[Not yet implemented]</span></p>
-        <p>Games ongoing: <span class = "gamesOngoing">[Not yet implemented]</span></p>
-      </div>
         <h1></h1>
         <h3>Rules:</h3>
         <ul>
@@ -30,7 +31,7 @@
                     <li>Red: This colour pin is not in the code.</li>
                 </ul>
             </li>
-            <li>The guesser then gets back these 4 ratings, however, the guesser does not know which rating belongs to which pin. So all the guesser knows, is that they had <em>x</em> pins that were the right colour and in the right spot, <em>y</em> pins that were the right colour, but in the wrong spot, and <em>z</em> pins that were not in the code at all.</li>
+            <li>The guesser then gets back these 4 ratings, however, the guesser does not know which rating belongs to which pin. So all the guesser knows, is that they had <em>x</em> pins that were the right colour and in the right spot, <em>y</em> pins that were the right colour, but in the wrong spot, and <em>z</em> pins that were not in the combination at all.</li>
             <li>If the guesser can crack the code within 10 guesses, they win, otherwise, the code-maker wins!</li>
             <li>Click (and hold) on the logo to the right for a surprise!</li>
         </ul>
@@ -45,11 +46,7 @@
       <img src = "images/MasterMindLogo.png" alt = "logo">
     </div>
 
-    <script>
-      window.onresize = function() {
-        document.querySelector(".gamesStarted").textContent = window.innerWidth + " x " + window.innerHeight;
-      }
-    </script>
+    <script src = "javascripts/splashPage.js"></script>
 
   </body>
 </html>
