@@ -12,3 +12,6 @@ zooming out a tiny bit tends to fix it.
 This project was made primarily on Chrome, but also works in Firefox. We didn't test other browsers.
 
 The game was, for the most part, made on a 27inch screen, so it works best on a large screen, but it's still playable on smaller screens.
+
+Made by Casper Dekeling & Julie Schnitzler.
+GitHub: https://github.com/CasperDekeling/WebAssingment (yes I know there's a typo in the link :P)
