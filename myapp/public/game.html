@@ -3,204 +3,199 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheets/game.css">
     <title>MasterMind</title>
     
 
   </head>
   <body>
-
-    <div class = "logo">
-        <img src = "images/MasterMindLogo.png">
-        <h1>MasterMind</h1>
+    <div class = "resolutionAlert">
+        <h2>Your resolution is too small!</h2>
+    </div>
+    <div class = "buttons">
+        <div class = "buttonHelp"><img src = "images/questionMark.png"></div>
+        <a href = "/splash"><div class = "buttonQuit"><img src = "images/x.png"></div></a>
+    </div>
+    <div class = "rules" hidden = "hidden">
+        <h3>Rules:</h3>
+        <ul>
+            <li>There are 8 different coloured pins. One player makes a code out of 4 pins, the order also matters!. Colours can be used multiple times.</li>
+            <li>The other player has 10 guesses to crack the code. The player chooses 4 pins and places them on the board in the order they want.</li>
+            <li>After submitting a guess, the player that made the code has to rate the guess, they do this by rating each individual pin. A pin can be rated in 3 ways:
+                <ul>
+                    <li>Green: The pin is of the right colour, and in the right place.</li>
+                    <li>Yellow: The pin is of the right colour, but not in the right place.</li>
+                    <li>Red: This colour pin is not in the code.</li>
+                </ul>
+            </li>
+            <li>The guesser then gets back these 4 ratings, however, the guesser does not know which rating belongs to which pin. So all the guesser knows, is that they had <em>x</em> pins that were the right colour and in the right spot, <em>y</em> pins that were the right colour, but in the wrong spot, and <em>z</em> pins that were not in the combination at all.</li>
+            <li>If the guesser can crack the code within 10 guesses, they win, otherwise, the code-maker wins!</li>
+            <li>Click (and hold) on the logo to the right for a surprise!</li>
+        </ul>
     </div>
 
-    <div class = "stats">
-        <p>Game ID:     <span class = "gameID"></span></p>
-        <p>Guesses left:    <span class = "guessesLeft">N/A</span></p>
-        <p>Status: <span class = "status"></span></p>
-        <p class = "combination">Combination: <span class = "combinationSpan"></span></p>
+    <div class = "logoAndStats">
+        <div class = "logo">
+            <img src = "images/MasterMindLogo.png" class = "MMLogo">
+        </div>
+
+        <div class = "stats">
+            <h1></h1>
+            <p>Game ID:     <span class = "gameID"></span></p>
+            <p>Guesses left:    <span class = "guessesLeft">N/A</span></p>
+            <p>Status: <span class = "status"></span></p>
+            <p class = "combination">Combination: <span class = "combinationSpan"></span></p>
+        </div>
     </div>
 
     
     <div class = "board">
-        <div class = "rate">
-            <form class = "rateGuessForm">
-                <ul class = "rateGuess" hidden = true>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span class = "rateGuessShow"></span>
-                        <select name = "rating" id = "rating">
-                            <option value = "5">Green</option>
-                            <option value = "1">Yellow</option>
-                            <option value = "0" class = "redRating">Red</option>
-                        </select>
-                    </li>
-                    <input type = "button" value = "Submit rating" class = "rateGuessSubmit">
-                </ul>
-            </form>
-        </div>
         <div class = "previousGuesses">
             <div class = "prevGuess9">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess8">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess7">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess6">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess5">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess4">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess3">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess2">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess1">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
             <div class = "prevGuess0">
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "hole">h</div>
-                <div class = "rating">r</div>
-                <p></p>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "hole"></div>
+                <div class = "rating">
+                    <div class = "rating1"></div>
+                    <div class = "rating2"></div>
+                    <div class = "rating3"></div>
+                    <div class = "rating4"></div>
+                </div>
             </div>
         </div>
 
         <div class = "currentGuess">
-            <h3 class = "currentGuessText" hidden = true>Create a combination for the opponent to guess:</h3>
-            <form class = "formGuess">
-                <select id = "hole1" name = "hole1">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <select id = "hole2" name = "hole2">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <select id = "hole3" name = "hole3">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <select id = "hole4" name = "hole4">
-                    <option value = "red">          red         </option>
-                    <option value = "orange">       orange      </option>
-                    <option value = "yellow">       yellow      </option>
-                    <option value = "green">        green       </option>
-                    <option value = "lightblue">    lightblue   </option>
-                    <option value = "blue">         blue        </option>
-                    <option value = "purple">       purple      </option>
-                    <option value = "pink">         pink        </option>
-                </select>
-                <input type = "button" value = "Submit" class = "guessSubmit">
-            </form>
+            <div class = "hole"></div>
+            <div class = "hole"></div>
+            <div class = "hole"></div>
+            <div class = "hole"></div>
+            <input type = "button" value = "Submit" class = "ratingSubmit">
+            <input type = "button" value = "Submit" class = "guessSubmit">
         </div>
+
         <div class = "pins">
-            <div class = "red">red</div>
-            <div class = "orange">orange</div>
-            <div class = "yellow">yellow</div>
-            <div class = "green">green</div>
-            <div class = "lightblue">lightblue</div>
-            <div class = "blue">blue</div>
-            <div class = "purple">purple</div>
-            <div class = "pink">pink</div>
+            <div class = "red" draggable = "true"></div>
+            <div class = "orange" draggable = "true"></div>
+            <div class = "yellow" draggable = "true"></div>
+            <div class = "green" draggable = "true"></div>
+            <div class = "lightblue" draggable = "true"></div>
+            <div class = "blue" draggable = "true"></div>
+            <div class = "purple" draggable = "true"></div>
+            <div class = "pink" draggable = "true"></div>
+            
         </div>
+
+
+        
     </div>
     
     

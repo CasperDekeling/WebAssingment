@@ -8,10 +8,39 @@ const port = process.argv[2];
 const app = express();
 
 //Routes
-app.get("/", indexRouter);
 app.get("/game", indexRouter);
 app.get("/play", indexRouter);
-app.get("/splash", indexRouter);
+
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+
+//TODO: move to routes.
+app.get("/", (req, res) => {
+  if(gamesOngoing < 0) gamesOngoing = 0;
+  let currentDate = new Date();
+  let date = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear() + " @ " + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+  res.render("splash.ejs", {
+    gamesStarted: gamesStarted,
+    gamesFinished: gamesFinished,
+    gamesOngoing: gamesOngoing,
+    date: date
+  });
+});
+
+app.get("/splash", (req, res) => {
+  if(gamesOngoing < 0) gamesOngoing = 0;
+  let currentDate = new Date();
+  let date = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear() + " @ " + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+  res.render("splash.ejs", {
+    gamesStarted: gamesStarted,
+    gamesFinished: gamesFinished,
+    gamesOngoing: gamesOngoing,
+    date: date
+  });
+});
+
 
 const server = http.createServer(app);
 const wss = new websocket.Server({ server });
@@ -23,41 +52,7 @@ let gamesStarted = 0;
 let gamesFinished = 0;
 let gamesOngoing = 0;
 
-function Game(gameID) {
-  this.player1 = null;
-  this.player2 = null;
-  this.id = gameID;
-  this.combination = null;
-  this.guessesLeft = 10;
-
-  this.possibleStates = ["NoPlayers", "1Player", "2Players", "1Won", "2Won", "Aborted"];
-  this.gameState = this.possibleStates[0];
-
-  this.addPlayer = function(player) {
-      /*
-      * Can only add players if: there are no players in the game (possibleStates[0]), or if there is only one player in the game (possibleStates[1]).
-      * If this is not the case throw an error. 
-      */
-      if(this.gameState != this.possibleStates[0] && this.gameState != this.possibleStates[1]){
-          return new Error("Cannot add player!");
-      }
-
-      //Switches to 1Player gamestate if gamestate is NoPlayers, otherwist switches to 2Players.
-      if(this.gameState == this.possibleStates[0]) this.gameState = this.possibleStates[1];
-      else this.gameState = this.possibleStates[2];
-
-      //If there is no player1 yet, add the player as player1
-      if(this.player1 == null){
-          this.player1 = player;
-          console.log("GAME ID = " + this.id + ": Added player 1: ID = " + player.id);
-      }
-      //If there is already a player1, add the player as player2
-      else{
-          this.player2 = player;
-          console.log("GAME ID = " + this.id + ": Added player 2: ID = " + player.id);
-      }
-  }
-};
+let Game = require("./game")
 
 let gameID = 0;
 let connectionID = 0;
@@ -95,9 +90,6 @@ wss.on("connection", function (ws) {
     ws.send("GameID = " + gameID);
     games[gameID].player1.send("Player 2 joined, game is starting...");
     games[gameID].player1.send("Create a combination.");
-
-    gamesStarted++;
-    gamesOngoing++;
   }
   else {
     //If player 1 is not con, and player 2 isnt either, then the game was already full (or addPlayer didnt execute correctly), so player couldnt be added.
@@ -118,6 +110,11 @@ wss.on("connection", function (ws) {
       let tempID = parseInt(message.substring(9,13));
       games[tempID].combination = message.substring(28).split(",");
       games[tempID].player2.send("Start guessing.");
+
+      //Game is considered 'ongoing'/'started' when the combination has been made.
+      gamesOngoing++;
+      gamesStarted++;
+
     }
 
     if(message.includes("Rating = ")){
@@ -141,7 +138,7 @@ wss.on("connection", function (ws) {
       else if(games[tempID].guessesLeft == 0){
         games[tempID].gameState = games[tempID].possibleStates[3];
         console.log("GameID = " + tempID + ": Player 1 won.");
-        games[tempID].player2.send("Player 1 won.");
+        games[tempID].player2.send("Player 1 won. Combination = " + games[tempID].combination.toString());
         games[tempID].player1.send("Player 1 won.");
         
         gamesOngoing--;
@@ -152,6 +149,7 @@ wss.on("connection", function (ws) {
     if(message.includes("Aborting game.")){
       //Abort game.
       let tempID = parseInt(message.substring(9,13));
+      if(tempID <= gameID){
       if(games[tempID].gameState != games[tempID].possibleStates[3] && games[tempID].gameState != games[tempID].possibleStates[4]){
         games[tempID].gameState = games[tempID].possibleStates[5];
         if(games[tempID].player1 != null){
@@ -161,6 +159,7 @@ wss.on("connection", function (ws) {
           games[tempID].player2.send("Game was aborted, because one of the players quit.");
         }
       }
+    }
 
       //Close connection of the player that didn't disconnect.
       try {
@@ -177,7 +176,9 @@ wss.on("connection", function (ws) {
         console.log("Player 2 closing: " + e);
       }
 
-      gamesOngoing--;
+        if(games[tempID].combination != null){
+          gamesOngoing--;
+        }
     }
 
     console.log("[LOG] " + message);
