@@ -16,7 +16,7 @@ a {
 }
 
 .rules, .logo {
-    margin: auto auto auto auto;
+    margin: 27% auto auto auto;
 }
 
 .rules {
@@ -34,6 +34,7 @@ form {
 .logo {
   border-radius: 50%;
   background-color: rgb(18, 16, 31);
+  border: 5px solid magenta;
 }
 
 .stats {

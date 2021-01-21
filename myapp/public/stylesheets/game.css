@@ -32,6 +32,7 @@ body {
     border-radius: 50%;
     background-color: rgb(18, 16, 31);
     height: 20vw;
+    border: 5px solid magenta;
 }
 
 .MMLogo {
