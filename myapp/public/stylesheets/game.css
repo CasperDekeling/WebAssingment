@@ -23,7 +23,7 @@ body {
 }
 
 .logoAndStats {
-    margin: 15% auto auto 10%;
+    margin: 10% auto auto 10%;
     width: 20vw;
     
 }
@@ -32,6 +32,7 @@ body {
     border-radius: 50%;
     background-color: rgb(18, 16, 31);
     height: 20vw;
+    border: 5px solid magenta;
 }
 
 .MMLogo {
@@ -40,7 +41,7 @@ body {
 }
 
 .stats {
-    font-size: 200%;
+    font-size: 150%;
     margin-top: 5vh;
     background-color: rgb(18, 16, 31);
     border: 5px solid magenta;
@@ -52,7 +53,7 @@ h1 {
 }
 
 /*
-  This whole after before setup doesnt really make sense to do it this way, but we kind of had to force it in somewhere, because it's required
+  This whole after/before setup doesnt really make sense to do it this way, but we kind of had to force it in somewhere, because it's required
 */
 h1::after {
     content: 'Mind';
@@ -60,7 +61,7 @@ h1::after {
   }
   
   /*
-    This whole after before setup doesnt really make sense to do it this way, but we kind of had to force it in somewhere, because it's required
+    This whole after/before setup doesnt really make sense to do it this way, but we kind of had to force it in somewhere, because it's required
   */
   h1::before{
     content: 'Master';
